@@ -27,9 +27,6 @@ public class Analyse  {
                 listMethods.add(m);
             }
         }
-        /*for(CtMethod<?> m : listMethods) {
-            System.out.println(m.getParent().getShortRepresentation() + " " + m.getShortRepresentation());
-        }*/
 
         // recuperation des methodes main du projet a analyser.
         for (CtMethod<?> m : factory.Method().getMainMethods()) {
@@ -45,22 +42,22 @@ public class Analyse  {
 
         listDeadMethod = new ArrayList<CtMethod<?>>(listMethods);
         listDeadMethod.removeAll(listMethodsToKeep);
-        /*System.out.println("All methods in the project : " + listMethods.size());
+
+        //affichage
+        System.out.println("All methods in the project : " + listMethods.size());
         System.out.println("Dead methods : " + listDeadMethod.size());
         System.out.println("List of dead methods : ");
-        for(CtMethod<?> m : listMethods) {
+        for(CtMethod<?> m : listDeadMethod) {
             System.out.println(m.getParent().getShortRepresentation() + " " + m.getShortRepresentation());
         }
         System.out.println("\nList of keep methods : ");
         for(CtMethod<?> m : listMethodsToKeep) {
             System.out.println(m.getParent().getShortRepresentation() + " " + m.getShortRepresentation());
         }
-*/
+
     }
 
     private static void flowOfInvocation(CtMethod<?> method){
-
-        /* CtConstructeurCall */
 
         //on recupere toute les invocations dans le corp de la methode
         for (CtInvocation<?> i : (ArrayList<CtInvocation<?>>) method.getBody().getElements(new TypeFilter(CtInvocation.class))) {
@@ -69,7 +66,6 @@ public class Analyse  {
             String rep = pickMethodNameAndClassFromAnCtInvocation(i);
             for (CtMethod<?> m : listMethods) {
                 if (rep.equals(m.getSimpleName()) && ifNotAlreadyVerified(rep)) {
-                    System.out.println(rep + " " + m.getSimpleName());
                     // on enregistre le pasage dans la methode dans une liste de methode visite
                     listMethodsToKeep.add(m);
                     flowOfInvocation(m);
